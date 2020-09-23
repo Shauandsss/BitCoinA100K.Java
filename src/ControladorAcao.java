@@ -28,7 +28,7 @@ public class ControladorAcao {
             SimpleDateFormat hojeformat = new SimpleDateFormat("ddMMyyyy");
             System.out.println(hojeformat.format(hoje));
             String sHoje = String.valueOf(hojeformat.format(hoje));
-            path = "C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/COTAHIST_D" + hojeformat.format(hoje)
+            path = "C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Cotações/COTAHIST_D" + hojeformat.format(hoje)
                     + ".txt";
             BufferedReader buffRead = new BufferedReader(new FileReader(path));
             String valordeci = "", acao = "", valor = "", linha = "";

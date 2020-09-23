@@ -13,7 +13,7 @@ public class ControladorPessoa {
         return this.pessoas.size();
     }
 
-    public boolean adicionarVariaspessoas() {
+    public boolean adicionarVariaspessoas() { 
         this.pessoas.add(new Pessoa(1, "Cláudio", 77228589025l));
         this.pessoas.add(new Pessoa(2, "Maria", 61375649086l));
         this.pessoas.add(new Pessoa(3, "Maiara", 40133732037l));
