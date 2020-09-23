@@ -1,13 +1,14 @@
 /*
-    Desenvolvido por Shauan Gustavo dos Santos
-    Ciência da Computação 1° Período
+    Desenvolvido por Shauan Gustavo dos Santos e Henrique Cavalli
+    Ciência da Computação 2° Período
     Prof° José Toniazzo
 */
 public class App {
     public static void main(final String[] args) throws Exception {
         ControladorAcao Acoes = new ControladorAcao();
-        Acoes.atualizar();    
-        
+        Acoes.procuraeSalvaArquivos();
+        /*Acoes.atualizar();    
+        */
         
         
         
