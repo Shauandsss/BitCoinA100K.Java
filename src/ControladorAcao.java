@@ -24,7 +24,7 @@ public class ControladorAcao {
         this.AcoesHistorico = new ArrayList<>();
     }
 
-    public List adicionarAcoesAPessoa(String Cod, double Pm, int quantidade, List<Acao> AcoesUsuario) {
+    public List<Acao> adicionarAcoesAPessoa(String Cod, double Pm, int quantidade, List<Acao> AcoesUsuario) {
         AcoesUsuario.add(new Acao(Cod, Pm, quantidade));
         return AcoesUsuario;
     }
@@ -34,28 +34,27 @@ public class ControladorAcao {
         return Cod;
     }
 
-    public List alterarAcoes(String codAcao, double Pm, int Qntd, List<Acao> Acoes) throws IOException, InterruptedException {
+    public List<Acao> alterarAcoes(String codAcao, double Pm, int Qntd, List<Acao> Acoes) throws IOException, InterruptedException {
         removerAcoes(codAcao, Acoes);
         Acoes.add(new Acao(codAcao, Pm, Qntd));
         return Acoes;
     }
 
-    public List removerAcoes(String codAcao, List<Acao> Acoes) throws IOException, InterruptedException {
+    public List<Acao> removerAcoes(String codAcao, List<Acao> AcoesX) throws IOException, InterruptedException {
         int index = 0;
-        System.out.println(codAcao);
-        for (Acao p : Acoes){
-            System.out.println(p.Cod);
-            if(p.Cod == codAcao){
+        for (Acao p : AcoesX){
+            if(p.Cod.equals(codAcao)){
                 break;
             }
             index ++;
         }
-        Acoes.remove(index);
-        return Acoes;
+        AcoesX.remove(index);
+        return AcoesX;
     }
-    public Acao pegarAcao(String codAcao, List<Acao> Acoes) throws IOException, InterruptedException {
-        for (Acao p : Acoes){
-            if(p.Cod == codAcao){
+
+    public Acao pegarAcao(String codAcao, List<Acao> AcoesX) throws IOException, InterruptedException {
+        for (Acao p : AcoesX){
+            if(p.Cod.equals(codAcao)){
                 return p;
             }
         }

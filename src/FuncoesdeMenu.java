@@ -63,7 +63,7 @@ public class FuncoesdeMenu {
     public static double pegarDouble() {
         String digitado = "";
         digitado = Scan.nextLine();
-        return Integer.parseInt(digitado);
+        return Double.parseDouble(digitado);
     }
 
     public static void acoes(int opcao) throws IOException, InterruptedException {
