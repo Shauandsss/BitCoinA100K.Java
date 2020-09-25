@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -14,15 +15,88 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 public class ControladorAcao {
-    public ArrayList<Pessoa> pessoas;
+	public List<Acao> AcoesUsuario;
+    public List<Acao> AcoesHistorico;
+    final static Scanner Scan = new Scanner(System.in);
 
     public ControladorAcao() {
-        this.pessoas = new ArrayList<>();
+        this.AcoesUsuario = new ArrayList<>();
+        this.AcoesHistorico = new ArrayList<>();
     }
+
+    public List adicionarAcoesAPessoa(String Cod, double Pm, int quantidade, List<Acao> AcoesUsuario) {
+        AcoesUsuario.add(new Acao(Cod, Pm, quantidade));
+        return AcoesUsuario;
+    }
+
+    public String adicionarAcoesAHistorico(String Cod, int Valor, String Data) {
+        this.AcoesUsuario.add(new Acao(Cod, Valor, Data));
+        return Cod;
+    }
+
+    public List alterarAcoes(String codAcao, double Pm, int Qntd, List<Acao> Acoes) throws IOException, InterruptedException {
+        removerAcoes(codAcao, Acoes);
+        Acoes.add(new Acao(codAcao, Pm, Qntd));
+        return Acoes;
+    }
+
+    public List removerAcoes(String codAcao, List<Acao> Acoes) throws IOException, InterruptedException {
+        int index = 0;
+        System.out.println(codAcao);
+        for (Acao p : Acoes){
+            System.out.println(p.Cod);
+            if(p.Cod == codAcao){
+                break;
+            }
+            index ++;
+        }
+        Acoes.remove(index);
+        return Acoes;
+    }
+    public Acao pegarAcao(String codAcao, List<Acao> Acoes) throws IOException, InterruptedException {
+        for (Acao p : Acoes){
+            if(p.Cod == codAcao){
+                return p;
+            }
+        }
+        System.out.println("Ação inexistente, retornando ao menu...");
+
+        return null;
+    }
+    
+    public Acao mostrarPessoas(List<Acao> Acoes) throws IOException, InterruptedException {
+        FuncoesdeMenu.limparTela();
+        System.out.println("|| ============================================ ||");
+        System.out.println("|| Cód Ação | Quantidade:     |  Preço Médio:   || ");
+        System.out.println("|| ============================================ ||");
+        for (Acao p : Acoes){
+            int x = p.Cod.length();
+            String cod = p.Cod;
+            for(int i = 0;i < (7 - x);i++){
+                cod = cod + " ";
+            }
+            String Qunt = String.valueOf(p.Quantidade);
+            int z = Qunt.length();
+            for(int i = 0;i < (12 - z);i++){
+                Qunt = Qunt + " ";
+            }
+
+            String Pm = String.valueOf(p.Pm);
+            int y = Pm.length();
+            for(int i = 0;i < (10 - y);i++){
+                Pm = Pm + " ";
+            }
+            
+            System.out.print("|| "+ cod + "  |  " + Qunt + "   |   " + Pm + "    || \n");
+        }
+        System.out.println("|| ============================================ ||");
+        return null;
+    }
+
+
 
     public boolean atualizar() throws IOException, InterruptedException {
         String path;
-        // Date hoje = new Date(System.currentTimeMillis());
         for (int i = 0; i < 30; i++) {
             Date hoje = new Date(System.currentTimeMillis() - i * 86400000);
             SimpleDateFormat hojeformat = new SimpleDateFormat("ddMMyyyy");

@@ -1,9 +1,10 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 
 public class ControladorPessoa {
-    public ArrayList<Pessoa> pessoas;
+    public List<Pessoa> pessoas;
 
     public ControladorPessoa() {
         this.pessoas = new ArrayList<>();
@@ -14,22 +15,24 @@ public class ControladorPessoa {
     }
 
     public boolean adicionarVariaspessoas() { 
-        this.pessoas.add(new Pessoa(1, "Cláudio", 77228589025l));
-        this.pessoas.add(new Pessoa(2, "Maria", 61375649086l));
-        this.pessoas.add(new Pessoa(3, "Maiara", 40133732037l));
-        this.pessoas.add(new Pessoa(4, "Julia", 64187885080l));
-        this.pessoas.add(new Pessoa(5, "Jhonatan", 22144621047l));
-        this.pessoas.add(new Pessoa(6, "Carlos", 85451128073l));
-        this.pessoas.add(new Pessoa(7, "Alysson", 39140457010l));
-        this.pessoas.add(new Pessoa(8, "José", 76642216091l));
+        ArrayList<Acao> Vazio = new ArrayList<>();
+        this.pessoas.add(new Pessoa(1, "Cláudio", 77228589025l, Vazio));
+        this.pessoas.add(new Pessoa(2, "Maria", 61375649086l, Vazio));
+        this.pessoas.add(new Pessoa(3, "Maiara", 40133732037l, Vazio));
+        this.pessoas.add(new Pessoa(4, "Julia", 64187885080l, Vazio));
+        this.pessoas.add(new Pessoa(5, "Jhonatan", 22144621047l, Vazio));
+        this.pessoas.add(new Pessoa(6, "Carlos", 85451128073l,Vazio));
+        this.pessoas.add(new Pessoa(7, "Alysson", 39140457010l,Vazio));
+        this.pessoas.add(new Pessoa(8, "José", 76642216091l,Vazio));
         return false;
 
     }
 
     public int adicionarPessoas(String nome, long cpf) {
+        ArrayList<Acao> Vazio = new ArrayList<>();
         Pessoa p = this.pessoas.get((this.pessoas.size()) - 1);
         int matricula = p.matricula + 1;
-        this.pessoas.add(new Pessoa(matricula, nome, cpf));
+        this.pessoas.add(new Pessoa(matricula, nome, cpf,Vazio));
         return matricula;
     }
 
@@ -47,7 +50,13 @@ public class ControladorPessoa {
 
     public int alterarPessoas(int matricula,String nome,long cpf) throws IOException, InterruptedException {
         removerPessoas(matricula);
-        this.pessoas.add(new Pessoa(matricula, nome, cpf));
+        ArrayList<Acao> Vazio = new ArrayList<>();
+        this.pessoas.add(new Pessoa(matricula, nome, cpf, Vazio));
+        return matricula;
+    }
+    public int alterarPessoasComAcao(int matricula,String nome,long cpf, List<Acao> Acoes) throws IOException, InterruptedException {
+        removerPessoas(matricula);
+        this.pessoas.add(new Pessoa(matricula, nome, cpf, Acoes));
         return matricula;
     }
 

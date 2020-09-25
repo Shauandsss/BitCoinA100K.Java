@@ -5,10 +5,10 @@
 */
 public class App {
     public static void main(final String[] args) throws Exception {
-        ControladorAcao Acoes = new ControladorAcao();
+        /*ControladorAcao Acoes = new ControladorAcao();
         Acoes.procuraeSalvaArquivos();
-      /*  Acoes.atualizar();  
-
+        Acoes.atualizar();  */
+        
         FuncoesdeMenu.limparTela();
         System.out.println("Bem vindo ao sistema!");
         FuncoesdeMenu.adicionarVariaspessoas();
@@ -18,7 +18,7 @@ public class App {
             if(FuncoesdeMenu.Login()){
                 while(true){     
                     FuncoesdeMenu.mostrarMenu();
-                    final int opcao = FuncoesdeMenu.pegarInt();
+                    int opcao = FuncoesdeMenu.pegarInt();
                     FuncoesdeMenu.limparTela();
                     FuncoesdeMenu.acoes(opcao);
                     if(opcao == 5) break;
@@ -32,6 +32,6 @@ public class App {
                 } 
                 FuncoesdeMenu.limparTela();
             }
-        }*/
+        }
     }
 }
