@@ -27,7 +27,7 @@ public class ControladorAcao {
 
     public List<Acao> adicionarAcoesAPessoa(int Matricula ,String Cod, double Pm, int quantidade, List<Acao> AcoesUsuario) throws IOException {
         AcoesUsuario.add(new Acao(Cod, Pm, quantidade));
-        ItTxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/PessoaAcao.txt", Matricula + ";" + Cod + ";" + Pm + ";" + quantidade + ";");
+        Interacaotxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/PessoaAcao.txt", Matricula + ";" + Cod + ";" + Pm + ";" + quantidade + ";", false);
         return AcoesUsuario;
     }
 
@@ -36,16 +36,17 @@ public class ControladorAcao {
         return Cod;
     }
 
-    public List<Acao> alterarAcoes(String codAcao, double Pm, int Qntd, List<Acao> Acoes) throws IOException, InterruptedException {
-        removerAcoes(codAcao, Acoes);
-        Acoes.add(new Acao(codAcao, Pm, Qntd));
+    public List<Acao> alterarAcoes(int Matricula,String codAcao, double Pm, int Qntd, List<Acao> Acoes) throws IOException, InterruptedException {
+        removerAcoes(Matricula, codAcao, Acoes);
+        adicionarAcoesAPessoa(Matricula, codAcao, Pm, Qntd, Acoes);
         return Acoes;
     }
 
-    public List<Acao> removerAcoes(String codAcao, List<Acao> AcoesX) throws IOException, InterruptedException {
+    public List<Acao> removerAcoes(int Matricula,String codAcao, List<Acao> AcoesX) throws IOException, InterruptedException {
         int index = 0;
         for (Acao p : AcoesX){
             if(p.Cod.equals(codAcao)){
+                Interacaotxt.removeTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/PessoaAcao.txt", Matricula + ";" + p.Cod + ";" + p.Pm + ";" + p.Quantidade + ";");
                 break;
             }
             index ++;
@@ -93,8 +94,6 @@ public class ControladorAcao {
         System.out.println("|| ============================================ ||");
         return null;
     }
-
-
 
     public boolean atualizar() throws IOException, InterruptedException {
         String path;

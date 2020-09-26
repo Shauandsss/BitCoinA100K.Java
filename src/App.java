@@ -5,17 +5,17 @@
 */
 public class App {
     public static void main(final String[] args) throws Exception {
-        /*Interacaotxt ItTxt = new Interacaotxt();
-        FuncoesdeMenu.adicionarVariaspessoas();
+        Interacaotxt ItTxt = new Interacaotxt();
 
-        ControladorAcao Acoes = new ControladorAcao();
+
+        
+/*        ControladorAcao Acoes = new ControladorAcao();
         Acoes.procuraeSalvaArquivos();
-        Acoes.atualizar();  */
-       
+        Acoes.atualizar(); */
+ 
         FuncoesdeMenu.limparTela();
         System.out.println("Bem vindo ao sistema!");
-        FuncoesdeMenu.adicionarVariaspessoas();
-        FuncoesdeMenu.limparTela();
+        ItTxt.objetificaçãoTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt", 1);
         int sair = 0;
         while(sair == 0){
             if(FuncoesdeMenu.Login()){
@@ -36,5 +36,6 @@ public class App {
                 FuncoesdeMenu.limparTela();
             }
         }
+
     }
 }

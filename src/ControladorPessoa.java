@@ -4,61 +4,77 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 public class ControladorPessoa {
-    public List<Pessoa> pessoas;
-    Interacaotxt ItTxt = new Interacaotxt();
+    public static List<Pessoa> pessoas;
 
     public ControladorPessoa() {
-        this.pessoas = new ArrayList<>();
+        ControladorPessoa.pessoas = new ArrayList<>();
     }
 
     public int quantidadePessoas() {
-        return this.pessoas.size();
+        return ControladorPessoa.pessoas.size();
     }
 
     public boolean adicionarVariaspessoas() throws IOException {
         ArrayList<Acao> Vazio = new ArrayList<>();
-        this.pessoas.add(new Pessoa(1, "Administrator", 61375649086l, Vazio));
-        adicionarPessoas("Cláudio", 77228589025l);
-        adicionarPessoas("Maria", 77228589025l);
-        adicionarPessoas("Maiara", 77228589025l);
-        adicionarPessoas("Julia", 77228589025l);
-        adicionarPessoas("Jhonatan", 77228589025l);
-        adicionarPessoas("Carlos", 77228589025l);
-        adicionarPessoas("Alysson", 77228589025l);
+        ControladorPessoa.pessoas.add(new Pessoa(1, "Administrator", 61375649086l, Vazio));
+        adicionarPessoas(9, "Cláudio", 77228589025l);
+        adicionarPessoas(10, "Maria", 77228589025l);
+        adicionarPessoas(11, "Maiara", 77228589025l);
+        adicionarPessoas(12, "Julia", 77228589025l);
+        adicionarPessoas(13, "Jhonatan", 77228589025l);
+        adicionarPessoas(14, "Carlos", 77228589025l);
+        adicionarPessoas(15, "Alysson", 77228589025l);
         return false;
     }
 
     public int adicionarPessoas(String nome, long cpf) throws IOException {
         ArrayList<Acao> Vazio = new ArrayList<>();
-        Pessoa p = this.pessoas.get((this.pessoas.size())-1);
+        System.out.println(quantidadePessoas());
+        Pessoa p = ControladorPessoa.pessoas.get((ControladorPessoa.pessoas.size()) - 1);
         int matricula = p.matricula + 1;
-        this.pessoas.add(new Pessoa(matricula, nome, cpf,Vazio));
-        
-        ItTxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt", matricula + ";" + nome + ";" + cpf + ";");
+        ControladorPessoa.pessoas.add(new Pessoa(matricula, nome, cpf, Vazio));
+
+        Interacaotxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt",
+                matricula + ";" + nome + ";" + cpf + ";", false);
+        return matricula;
+    }
+
+    public static int adicionarPessoas(int matricula, String nome, long cpf) throws IOException {
+        ArrayList<Acao> Vazio = new ArrayList<>();
+        pessoas.add(new Pessoa(matricula, nome, cpf, Vazio));
         return matricula;
     }
 
     public boolean removerPessoas(int matricula) throws IOException, InterruptedException {
         int index = 0;
+        int matriculaRemover = 0;
+        String nome ="";
+        long cpf = 0;
         for (Pessoa p : pessoas){
             if(p.matricula==matricula){
+                matriculaRemover = p.matricula;
+                nome = p.nome;
+                cpf = p.cpf;
                 break;
             }
             index ++;
         }
-        this.pessoas.remove(index);
+        Interacaotxt.removeTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt", matriculaRemover + ";" + nome + ";" + cpf + ";");
+        ControladorPessoa.pessoas.remove(index);
         return true;
     }
 
     public int alterarPessoas(int matricula,String nome,long cpf) throws IOException, InterruptedException {
         removerPessoas(matricula);
         ArrayList<Acao> Vazio = new ArrayList<>();
-        this.pessoas.add(new Pessoa(matricula, nome, cpf, Vazio));
+        Interacaotxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt", matricula + ";" + nome + ";" + cpf + ";", false);
+        ControladorPessoa.pessoas.add(new Pessoa(matricula, nome, cpf, Vazio));
         return matricula;
     }
+    
     public int alterarPessoasComAcao(int matricula,String nome,long cpf, List<Acao> Acoes) throws IOException, InterruptedException {
         removerPessoas(matricula);
-        this.pessoas.add(new Pessoa(matricula, nome, cpf, Acoes));
+        ControladorPessoa.pessoas.add(new Pessoa(matricula, nome, cpf, Acoes));
         return matricula;
     }
 
@@ -85,7 +101,7 @@ public class ControladorPessoa {
     public Pessoa mostrarPessoas() throws IOException, InterruptedException {
         FuncoesdeMenu.limparTela();
         System.out.println("|| =================================================== ||");
-        System.out.println("|| Matrícula |  Nome:                |  CPF:           || ");
+        System.out.println("|| Matrícula |  Nome:                |  CPF:           ||");
         System.out.println("|| =================================================== ||");
         for (Pessoa p : pessoas){
             int x = p.nome.length();

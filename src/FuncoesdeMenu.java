@@ -22,6 +22,7 @@ public class FuncoesdeMenu {
             String senha = temp.substring(0, 4);
             if (senha.equals(senhaInput)) {
                 System.out.println("Login efetuado com sucesso! " + Login.nome + " seja bem vindo(a)");
+                limparTela();
                 MatriculaLogada = matricula;
                 return true;
             } else {
@@ -168,7 +169,7 @@ public class FuncoesdeMenu {
                 System.out.print("Quantidade: ");
                 int Qntd = pegarInt();
                 Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                AcaoTemp = AcoesP.alterarAcoes(CodAcao, Pm, Qntd, X.Acoes);
+                AcaoTemp = AcoesP.alterarAcoes(X.matricula, CodAcao, Pm, Qntd, X.Acoes);
                 Criador.alterarPessoasComAcao(X.matricula,X.nome,X.cpf, AcaoTemp);
                 System.out.println(" " + X.nome + ", " + Qntd + " cotas de " + CodAcao + " foram alteradas na sua carteira \n " +
                 " com preço médio de: " + Pm + "\n"
@@ -225,9 +226,9 @@ public class FuncoesdeMenu {
                 // criar validador
                 Pessoa X = Criador.pegarPessoa(MatriculaLogada);
                 Acao Z = AcoesP.pegarAcao(CodAcao, X.Acoes);
-                Criador.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,AcoesP.removerAcoes(CodAcao, X.Acoes));
+                Criador.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,AcoesP.removerAcoes(X.matricula, CodAcao, X.Acoes));
                 System.out.println(" " + X.nome + ", " + Z.Quantidade + " cotas de " + Z.Cod + " foram excluídas na sua carteira com preço médio de: " + Z.Pm + "\n "
-                + " Deseja excluir mais ações a sua carteira ? 1 - Sim | 2 - Não ");
+                + " Deseja excluir mais ações da sua carteira ? 1 - Sim | 2 - Não ");
                 int Opc = pegarInt();
                 if((Opc < 1) || (Opc > 2)){
                     System.out.println("Opcão invalida, retornando ao menu! \n");
@@ -248,6 +249,7 @@ public class FuncoesdeMenu {
                 acoes(4);
             }
             if(segopc == 1){
+                limparTela();
                 System.out.println("1 - Consultar individualmente\n2 - Visualizar todos usuarios: ");   
                 int yopcao = FuncoesdeMenu.pegarInt();
                 if((yopcao != 1) && (yopcao != 2)){
