@@ -18,14 +18,16 @@ public class ControladorAcao {
 	public List<Acao> AcoesUsuario;
     public List<Acao> AcoesHistorico;
     final static Scanner Scan = new Scanner(System.in);
+    Interacaotxt ItTxt = new Interacaotxt();
 
     public ControladorAcao() {
         this.AcoesUsuario = new ArrayList<>();
         this.AcoesHistorico = new ArrayList<>();
     }
 
-    public List<Acao> adicionarAcoesAPessoa(String Cod, double Pm, int quantidade, List<Acao> AcoesUsuario) {
+    public List<Acao> adicionarAcoesAPessoa(int Matricula ,String Cod, double Pm, int quantidade, List<Acao> AcoesUsuario) throws IOException {
         AcoesUsuario.add(new Acao(Cod, Pm, quantidade));
+        ItTxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/PessoaAcao.txt", Matricula + ";" + Cod + ";" + Pm + ";" + quantidade + ";");
         return AcoesUsuario;
     }
 
@@ -63,7 +65,7 @@ public class ControladorAcao {
         return null;
     }
     
-    public Acao mostrarPessoas(List<Acao> Acoes) throws IOException, InterruptedException {
+    public Acao mostrarAcao(List<Acao> Acoes) throws IOException, InterruptedException {
         FuncoesdeMenu.limparTela();
         System.out.println("|| ============================================ ||");
         System.out.println("|| Cód Ação | Quantidade:     |  Preço Médio:   || ");

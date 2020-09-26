@@ -5,10 +5,13 @@
 */
 public class App {
     public static void main(final String[] args) throws Exception {
-        /*ControladorAcao Acoes = new ControladorAcao();
+        /*Interacaotxt ItTxt = new Interacaotxt();
+        FuncoesdeMenu.adicionarVariaspessoas();
+
+        ControladorAcao Acoes = new ControladorAcao();
         Acoes.procuraeSalvaArquivos();
         Acoes.atualizar();  */
-        
+       
         FuncoesdeMenu.limparTela();
         System.out.println("Bem vindo ao sistema!");
         FuncoesdeMenu.adicionarVariaspessoas();

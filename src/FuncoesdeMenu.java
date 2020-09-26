@@ -50,7 +50,7 @@ public class FuncoesdeMenu {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
 
-    public static void adicionarVariaspessoas() {
+    public static void adicionarVariaspessoas() throws IOException {
         Criador.adicionarVariaspessoas();
     }
 
@@ -109,7 +109,7 @@ public class FuncoesdeMenu {
                     System.out.print("Quantidade: ");
                     int Qtnd = pegarInt();
                     Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                    Criador.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,AcoesP.adicionarAcoesAPessoa(CodAcao, Pm, Qtnd, X.Acoes));
+                    Criador.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,AcoesP.adicionarAcoesAPessoa(MatriculaLogada,CodAcao, Pm, Qtnd, X.Acoes));
                     System.out.println(" " + X.nome + ", " + Qtnd + " cotas de " + CodAcao + " foram adicionadas a sua carteira com preço médio de: " + Pm + "\n "
                     + " Deseja adicionar mais ações a sua carteira ? 1 - Sim | 2 - Não ");
 
@@ -130,7 +130,7 @@ public class FuncoesdeMenu {
         if (opcao == 2) { // Alterar
             limparTela();
             System.out.println("Deseja alterar uma pessoa ou uma ação ? \n1 - Pessoa\n2 - Ação");
-            int segopc = FuncoesdeMenu.pegarInt();
+            int segopc = pegarInt();
             if((segopc < 1) || (segopc > 2)){
                 gerarMensagem(2);
                 acoes(2);
@@ -138,7 +138,6 @@ public class FuncoesdeMenu {
             if(segopc == 1){
                 System.out.println("Para alterar uma pessoa insira matricula: ");
                 System.out.print("Matricula:  ");
-                String smatricula = Scan.nextLine();
                 int matricula = pegarInt();
                 Pessoa p = Criador.pegarPessoa(matricula);
                 System.out.println("Para alterar o cadastro do(a) " + p.nome + " insira: ");
@@ -305,7 +304,7 @@ public class FuncoesdeMenu {
                         return;
                 } else {
                     Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                    AcoesP.mostrarPessoas(X.Acoes);
+                    AcoesP.mostrarAcao(X.Acoes);
                 }      
             }
         } 
