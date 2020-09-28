@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.List;
 
@@ -14,19 +15,6 @@ public class ControladorPessoa {
         return ControladorPessoa.pessoas.size();
     }
 
-    public boolean adicionarVariaspessoas() throws IOException {
-        ArrayList<Acao> Vazio = new ArrayList<>();
-        ControladorPessoa.pessoas.add(new Pessoa(1, "Administrator", 61375649086l, Vazio));
-        adicionarPessoas(9, "Cláudio", 77228589025l);
-        adicionarPessoas(10, "Maria", 77228589025l);
-        adicionarPessoas(11, "Maiara", 77228589025l);
-        adicionarPessoas(12, "Julia", 77228589025l);
-        adicionarPessoas(13, "Jhonatan", 77228589025l);
-        adicionarPessoas(14, "Carlos", 77228589025l);
-        adicionarPessoas(15, "Alysson", 77228589025l);
-        return false;
-    }
-
     public int adicionarPessoas(String nome, long cpf) throws IOException {
         ArrayList<Acao> Vazio = new ArrayList<>();
         System.out.println(quantidadePessoas());
@@ -39,32 +27,40 @@ public class ControladorPessoa {
         return matricula;
     }
 
+    public static int adicionarPessoas(int matricula, String nome, long cpf, List<Acao>Acoes) throws IOException {
+        ControladorPessoa.pessoas.add(new Pessoa(matricula, nome, cpf, Acoes));
+        Interacaotxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt",
+                matricula + ";" + nome + ";" + cpf + ";", false);
+        return matricula;
+    }
+
     public static int adicionarPessoas(int matricula, String nome, long cpf) throws IOException {
         ArrayList<Acao> Vazio = new ArrayList<>();
         pessoas.add(new Pessoa(matricula, nome, cpf, Vazio));
         return matricula;
     }
 
-    public boolean removerPessoas(int matricula) throws IOException, InterruptedException {
+    public static boolean removerPessoas(int matricula) throws IOException, InterruptedException {
         int index = 0;
         int matriculaRemover = 0;
-        String nome ="";
+        String nome = "";
         long cpf = 0;
-        for (Pessoa p : pessoas){
-            if(p.matricula==matricula){
+        for (Pessoa p : pessoas) {
+            if (p.matricula == matricula) {
                 matriculaRemover = p.matricula;
                 nome = p.nome;
                 cpf = p.cpf;
                 break;
             }
-            index ++;
+            index++;
         }
-        Interacaotxt.removeTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt", matriculaRemover + ";" + nome + ";" + cpf + ";");
+        Interacaotxt.removeTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt",
+                matriculaRemover + ";" + nome + ";" + cpf + ";");
         ControladorPessoa.pessoas.remove(index);
         return true;
     }
 
-    public int alterarPessoas(int matricula,String nome,long cpf) throws IOException, InterruptedException {
+    public static int alterarPessoas(int matricula, String nome, long cpf) throws IOException, InterruptedException {
         removerPessoas(matricula);
         ArrayList<Acao> Vazio = new ArrayList<>();
         Interacaotxt.adicionaTxt("C:/Users/Administrator/Documents/GitHub/BitCoinA100K.Java/Txt's/Pessoa.txt", matricula + ";" + nome + ";" + cpf + ";", false);
@@ -72,13 +68,13 @@ public class ControladorPessoa {
         return matricula;
     }
     
-    public int alterarPessoasComAcao(int matricula,String nome,long cpf, List<Acao> Acoes) throws IOException, InterruptedException {
+    public static int alterarPessoasComAcao(int matricula,String nome,long cpf, List<Acao> Acoes) throws IOException, InterruptedException {
         removerPessoas(matricula);
-        ControladorPessoa.pessoas.add(new Pessoa(matricula, nome, cpf, Acoes));
+        adicionarPessoas(matricula, nome, cpf, Acoes);
         return matricula;
     }
 
-    public Pessoa pegarPessoa(int matricula) throws IOException, InterruptedException {
+    public static Pessoa pegarPessoa(int matricula) throws IOException, InterruptedException {
         for (Pessoa p : pessoas){
             if(p.matricula==matricula){
                 return p;
@@ -100,6 +96,7 @@ public class ControladorPessoa {
     
     public Pessoa mostrarPessoas() throws IOException, InterruptedException {
         FuncoesdeMenu.limparTela();
+        Collections.sort(pessoas);
         System.out.println("|| =================================================== ||");
         System.out.println("|| Matrícula |  Nome:                |  CPF:           ||");
         System.out.println("|| =================================================== ||");
@@ -114,7 +111,7 @@ public class ControladorPessoa {
             String temp = Long.toString(p.cpf);  
             System.out.println(imprimeCPF(temp) + " ||");
         }
-        System.out.println("|| =================================================== ||");
+        System.out.println("|| =================================================== ||\n");
         return null;
     }
 
@@ -175,4 +172,6 @@ public class ControladorPessoa {
         return(CPF.substring(0, 3) + "." + CPF.substring(3, 6) + "." +
         CPF.substring(6, 9) + "-" + CPF.substring(9, 11));
     }
+
 }
+

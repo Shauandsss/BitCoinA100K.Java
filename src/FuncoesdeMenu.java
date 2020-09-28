@@ -51,16 +51,13 @@ public class FuncoesdeMenu {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
 
-    public static void adicionarVariaspessoas() throws IOException {
-        Criador.adicionarVariaspessoas();
-    }
-
     public static int pegarInt() {
         String digitado = "";
         digitado = Scan.nextLine();
         return Integer.parseInt(digitado);
             
     }
+    
     public static double pegarDouble() {
         String digitado = "";
         digitado = Scan.nextLine();
@@ -91,7 +88,7 @@ public class FuncoesdeMenu {
                     boolean iscpf = ControladorPessoa.isCPF(scpf);
                     if(iscpf){
                         long cpf = Long.parseLong(scpf);
-                        Pessoa p = Criador.pegarPessoa(Criador.adicionarPessoas(nome, cpf));
+                        Pessoa p = ControladorPessoa.pegarPessoa(Criador.adicionarPessoas(nome, cpf));
                         limparTela();
                         System.out.println("Pessoa inserida!\nMatricula: " + p.matricula + "\nNome: " + p.nome + "\nCPF: " + p.cpf);
                         questaoRetorno(1, 1);
@@ -104,27 +101,34 @@ public class FuncoesdeMenu {
                     System.out.println("Para adicionar nova ação insira: ");
                     System.out.print("Código: ");
                     String CodAcao = Scan.nextLine();
-                    // criar validador
-                    System.out.print("Preço médio: ");
-                    double Pm = pegarDouble();
-                    System.out.print("Quantidade: ");
-                    int Qtnd = pegarInt();
-                    Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                    Criador.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,AcoesP.adicionarAcoesAPessoa(MatriculaLogada,CodAcao, Pm, Qtnd, X.Acoes));
-                    System.out.println(" " + X.nome + ", " + Qtnd + " cotas de " + CodAcao + " foram adicionadas a sua carteira com preço médio de: " + Pm + "\n "
-                    + " Deseja adicionar mais ações a sua carteira ? 1 - Sim | 2 - Não ");
+                    if(ControladorAcao.isAcao(CodAcao)){
+                        System.out.print("Preço médio: ");
+                        double Pm = pegarDouble();
+                        System.out.print("Quantidade: ");
+                        int Qtnd = pegarInt();
+                        Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
+                        
+                        ControladorPessoa.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,
+                                ControladorAcao.adicionarAcoesAPessoa(MatriculaLogada, CodAcao, Pm, Qtnd, X.Acoes));
+                        ControladorAcao.somarPm(X.matricula, CodAcao, X.Acoes);
+                        System.out.println(" " + X.nome + ", " + Qtnd + " cotas de " + CodAcao + " foram adicionadas a sua carteira com preço médio de: " + Pm + "\n "
+                        + " Deseja adicionar mais ações a sua carteira ? 1 - Sim | 2 - Não ");
 
-                    int Opc = pegarInt();
-                    if((Opc < 1) || (Opc > 2)){
-                        System.out.println("Opcão invalida, retornando ao menu! \n");
-                        return; 
+                        int Opc = pegarInt();
+                        if((Opc < 1) || (Opc > 2)){
+                            System.out.println("Opcão invalida, retornando ao menu! \n");
+                            return; 
                     }
                     if(Opc == 1){
+                        limparTela();
                         acoes(1);
                     }
                     else
                         return;
  
+                }
+                    System.out.println("Ação não registrada na BM&F BOVESPA"); 
+                    acoes(1);
                 }
         } 
 
@@ -140,7 +144,7 @@ public class FuncoesdeMenu {
                 System.out.println("Para alterar uma pessoa insira matricula: ");
                 System.out.print("Matricula:  ");
                 int matricula = pegarInt();
-                Pessoa p = Criador.pegarPessoa(matricula);
+                Pessoa p = ControladorPessoa.pegarPessoa(matricula);
                 System.out.println("Para alterar o cadastro do(a) " + p.nome + " insira: ");
                 System.out.print("Nome: ");  
                 String nome = Scan.nextLine();
@@ -150,7 +154,7 @@ public class FuncoesdeMenu {
                 boolean iscpf = ControladorPessoa.isCPF(scpf);
                 if(iscpf){
                     long cpf = Long.parseLong(scpf);    
-                    Criador.pegarPessoa(Criador.alterarPessoas(matricula, nome, cpf));
+                    ControladorPessoa.pegarPessoa(ControladorPessoa.alterarPessoas(matricula, nome, cpf));
                     questaoRetorno(1, 2);
                 } else {
                     gerarMensagem(3);
@@ -163,26 +167,32 @@ public class FuncoesdeMenu {
                 System.out.println("Para alterar uma ação insira: ");
                 System.out.print("Código: ");
                 String CodAcao = Scan.nextLine();
-                // criar validador
-                System.out.print("Preço médio: ");
-                double Pm = pegarDouble();
-                System.out.print("Quantidade: ");
-                int Qntd = pegarInt();
-                Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                AcaoTemp = AcoesP.alterarAcoes(X.matricula, CodAcao, Pm, Qntd, X.Acoes);
-                Criador.alterarPessoasComAcao(X.matricula,X.nome,X.cpf, AcaoTemp);
-                System.out.println(" " + X.nome + ", " + Qntd + " cotas de " + CodAcao + " foram alteradas na sua carteira \n " +
-                " com preço médio de: " + Pm + "\n"
-                + " Deseja alterar mais ações a sua carteira ? 1 - Sim | 2 - Não ");
-                int Opc = pegarInt();
-                if((Opc < 1) || (Opc > 2)){
-                    System.out.println("Opcão invalida, retornando ao menu! \n");
-                    return; 
+                if(ControladorAcao.isAcao(CodAcao)){
+
+                    System.out.print("Preço médio: ");
+                    double Pm = pegarDouble();
+                    System.out.print("Quantidade: ");
+                    int Qntd = pegarInt();
+                    Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
+                    AcaoTemp = AcoesP.alterarAcoes(X.matricula, CodAcao, Pm, Qntd, X.Acoes);
+                    ControladorPessoa.alterarPessoasComAcao(X.matricula,X.nome,X.cpf, AcaoTemp);
+                    System.out.println(" " + X.nome + ", " + Qntd + " cotas de " + CodAcao + " foram alteradas na sua carteira \n " +
+                    " com preço médio de: " + Pm + "\n"
+                    + " Deseja alterar mais ações a sua carteira ? 1 - Sim | 2 - Não ");
+                    int Opc = pegarInt();
+                    if((Opc < 1) || (Opc > 2)){
+                        System.out.println("Opcão invalida, retornando ao menu! \n");
+                        return; 
+                    }
+                    if(Opc == 1)
+                        acoes(2);
+                    else
+                        return;
+
+                } else {
+                    System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
+                    acoes(1);
                 }
-                if(Opc == 1)
-                    acoes(2);
-                else
-                    return;
             }   
         } 
         
@@ -198,12 +208,12 @@ public class FuncoesdeMenu {
                 System.out.println("Para deletar uma pessoa insira matricula: ");
                 System.out.print("Matricula:  ");
                 int matricula = pegarInt();
-                Pessoa R = Criador.pegarPessoa(matricula);
+                Pessoa R = ControladorPessoa.pegarPessoa(matricula);
                 if(R != null){
                     System.out.println("Você tem certeza que deseja remover o(a) "+ R.nome+" ? 1 - Sim | 2 - Não: " );
                     int resposta = pegarInt();
                     if(resposta == 1){
-                        Criador.removerPessoas(matricula);
+                        ControladorPessoa.removerPessoas(matricula);
                         System.out.println("Pessoa deletada com sucesso!");
                     } else {
                         System.out.println("Pessoa não removida");
@@ -223,24 +233,30 @@ public class FuncoesdeMenu {
                 System.out.println("Para deletar uma ação insira: ");
                 System.out.print("Código: ");
                 String CodAcao = Scan.nextLine();
-                // criar validador
-                Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                Acao Z = AcoesP.pegarAcao(CodAcao, X.Acoes);
-                Criador.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,AcoesP.removerAcoes(X.matricula, CodAcao, X.Acoes));
-                System.out.println(" " + X.nome + ", " + Z.Quantidade + " cotas de " + Z.Cod + " foram excluídas na sua carteira com preço médio de: " + Z.Pm + "\n "
-                + " Deseja excluir mais ações da sua carteira ? 1 - Sim | 2 - Não ");
-                int Opc = pegarInt();
-                if((Opc < 1) || (Opc > 2)){
-                    System.out.println("Opcão invalida, retornando ao menu! \n");
-                    return; 
+                if(ControladorAcao.isAcao(CodAcao)){
+                    Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
+                    Acao Z = AcoesP.pegarAcao(CodAcao, X.Acoes);
+                    ControladorPessoa.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,
+                            ControladorAcao.removerAcoes(X.matricula, CodAcao, X.Acoes));
+                    System.out.println(" " + X.nome + ", " + Z.Quantidade + " cotas de " + Z.Cod + " foram excluídas na sua carteira com preço médio de: " + Z.Pm + "\n "
+                    + " Deseja excluir mais ações da sua carteira ? 1 - Sim | 2 - Não ");
+                    int Opc = pegarInt();
+                    if((Opc < 1) || (Opc > 2)){
+                        System.out.println("Opcão invalida, retornando ao menu! \n");
+                        return; 
+                    }
+                    if(Opc == 1)
+                        acoes(3);
+                    else
+                        return;
+                 
+                } else {
+                    System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
+                    acoes(1);
                 }
-                if(Opc == 1)
-                    acoes(3);
-                else
-                    return;
             } 
-        } 
-
+        }
+        
         if (opcao == 4){ // Consultar
             System.out.println("Deseja consultar uma pessoa ou uma ação ? \n1 - Pessoa\n2 - Ação");
             int segopc = FuncoesdeMenu.pegarInt();
@@ -261,7 +277,7 @@ public class FuncoesdeMenu {
                     System.out.print("Digite: ");
                     int matricula = pegarInt();  
                     limparTela();
-                    Pessoa p = Criador.pegarPessoa(matricula);
+                    Pessoa p = ControladorPessoa.pegarPessoa(matricula);
                     if(p != null){
                         System.out.println("Matricula: " + p.matricula + "\nNome: " + p.nome + "\nCPF: " + p.cpf);
                         questaoRetorno(1, 4);
@@ -280,9 +296,9 @@ public class FuncoesdeMenu {
                 }
             } else {
                 FuncoesdeMenu.limparTela();
-                System.out.println("1 - Consultar individualmente\n2 - Visualizar todos as ações: ");
+                System.out.println("1 - Consultar individualmente\n2 - Visualizar todos as ações \n3 - Visualizar histórico de valorização de um papel: ");
                 int teropc = FuncoesdeMenu.pegarInt();
-                if((teropc < 1) || (teropc > 2)){
+                if((teropc < 1) || (teropc > 3)){
                     gerarMensagem(2);
                     acoes(4);
                 }
@@ -290,24 +306,36 @@ public class FuncoesdeMenu {
                     System.out.println("Para consultar uma ação insira: ");
                     System.out.print("Código: ");
                     String CodAcao = Scan.nextLine();
-                    // criar validador
-                    Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                    Acao Z = AcoesP.pegarAcao(CodAcao, X.Acoes);
-                    System.out.println(" " + X.nome + ", " + Z.Quantidade + " cotas de " + Z.Cod + " foram excluídas na sua carteira com preço médio de: " + Z.Pm + "\n _"
-                    + " Deseja excluir mais ações a sua carteira ? 1 - Sim | 2 - Não ");
-                    int Opc = pegarInt();
-                    if((Opc < 1) || (Opc > 2)){
-                        System.out.println("Opcão invalida, retornando ao menu! \n");
-                        return; 
+                    if(ControladorAcao.isAcao(CodAcao)){
+                        Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
+                        Acao Z = AcoesP.pegarAcao(CodAcao, X.Acoes);
+                        System.out.println(" " + X.nome + ", " + Z.Quantidade + " cotas de " + Z.Cod + " foram excluídas na sua carteira com preço médio de: " + Z.Pm + "\n _"
+                        + " Deseja excluir mais ações a sua carteira ? 1 - Sim | 2 - Não ");
+                        int Opc = pegarInt();
+                        if((Opc < 1) || (Opc > 2)){
+                            System.out.println("Opcão invalida, retornando ao menu! \n");
+                            return; 
+                        }
+                        if(Opc == 1)
+                            acoes(4);
+                        else
+                            return;
+                    } else {
+                        System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
+                            acoes(1);
                     }
-                    if(Opc == 1)
-                        acoes(4);
-                    else
-                        return;
-                } else {
-                    Pessoa X = Criador.pegarPessoa(MatriculaLogada);
-                    AcoesP.mostrarAcao(X.Acoes);
-                }      
+
+                } if (teropc == 2) {
+                    Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
+                    ControladorAcao.mostrarAcao(X.Acoes);
+                } if (teropc == 3){
+                    System.out.println("Para consultar uma ação insira: ");
+                    System.out.print("Código: ");
+                    String CodAcao = Scan.nextLine();
+                    if(ControladorAcao.isAcao(CodAcao)){
+                        ControladorAcao.mostrarValorizacao(CodAcao);
+                    }
+                } 
             }
         } 
 
