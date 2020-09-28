@@ -53,9 +53,12 @@ public class FuncoesdeMenu {
 
     public static int pegarInt() {
         String digitado = "";
+      //  digitado = Scan.nextLine();
         digitado = Scan.nextLine();
-        return Integer.parseInt(digitado);
-            
+        if((digitado == null) || (digitado.equals(""))){
+            return 0;
+        }
+        return Integer.parseInt(digitado); 
     }
     
     public static double pegarDouble() {

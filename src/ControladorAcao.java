@@ -214,23 +214,89 @@ public class ControladorAcao {
             }    
             System.out.print("\n");
         }
-        int coluna = 0, acaoInterior = 0, conteudo;
-        for (final Acao p : AcoesHistoricoValorizacao) {
-            System.out.println(p.pontoGraf + " -- " + coluna);
-            if(acaoInterior > p.pontoGraf)
-                conteudo = -1;
-            else if(acaoInterior < p.pontoGraf)    
-                conteudo = 1;
-            else 
-                conteudo = 0;
-            vetor[p.pontoGraf][coluna] = conteudo;   
-            vetor[p.pontoGraf][coluna + 1] = 0;
-            vetor[p.pontoGraf][coluna + 2] = 0;    
-            vetor[p.pontoGraf][coluna + 3] = 0;
-            vetor[p.pontoGraf][coluna + 4] = 0;
-            vetor[p.pontoGraf][coluna + 5] = conteudo;
+        int coluna = 0, direcao = 0;
+        int conteudo[] = new int [6];
+        for (int j = 0;j < AcoesHistoricoValorizacao.size() - 1; j++) {
+            if(AcoesHistoricoValorizacao.get(j).getpontoGraf() > AcoesHistoricoValorizacao.get(j + 1).getpontoGraf()){
+                direcao = 1;
+                conteudo[0] = 0;
+                conteudo[1] = 0;
+                conteudo[2] = 0;
+                conteudo[3] = 0;
+                conteudo[4] = 0;
+                conteudo[5] = 0;
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
+                    conteudo[1] = 1;
+                    conteudo[2] = 1;
+                    conteudo[3] = 1;
+                    conteudo[4] = 1;
+                    conteudo[5] = 1;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15){
+                    conteudo[2] = 2;
+                    conteudo[3] = 2;
+                    conteudo[4] = 2;
+                    conteudo[5] = 2;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 14){
+                    conteudo[3] = 3;
+                    conteudo[4] = 3;
+                    conteudo[5] = 3;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 13){
+                    conteudo[4] = 4;
+                    conteudo[5] = 4;          
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 12)
+                    conteudo[5] = 5;
+                    
+            } else if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < AcoesHistoricoValorizacao.get(j + 1).getpontoGraf()){
+                direcao = -1;
+                direcao = 1;
+                conteudo[0] = 0;
+                conteudo[1] = 0;
+                conteudo[2] = 0;
+                conteudo[3] = 0;
+                conteudo[4] = 0;
+                conteudo[5] = 0;
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
+                    conteudo[1] = -1;
+                    conteudo[2] = -1;
+                    conteudo[3] = -1;
+                    conteudo[4] = -1;
+                    conteudo[5] = -1;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2){
+                    conteudo[2] = -2;
+                    conteudo[3] = -2;
+                    conteudo[4] = -2;
+                    conteudo[5] = -2;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 3){
+                    conteudo[3] = -3;
+                    conteudo[4] = -3;
+                    conteudo[5] = -3;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 4){
+                    conteudo[4] = -4;
+                    conteudo[5] = -4;          
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 5)
+                    conteudo[5] = -5;
+            } else { 
+                direcao = 0;
+            }
+            System.out.println(coluna + " --- " + AcoesHistoricoValorizacao.get(j).getpontoGraf());
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[5]][coluna] = direcao;   
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[4]][coluna + 1] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[3]][coluna + 2] = direcao;
+            
+            
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[2]][coluna + 3] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[1]][coluna + 4] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[0]][coluna + 5] = direcao;
             coluna = coluna + 6;
-            acaoInterior = p.pontoGraf;
+            
         }
         
         for (int y = 0; y < 17 ; y++){ 

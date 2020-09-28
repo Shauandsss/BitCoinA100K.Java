@@ -25,6 +25,10 @@ public class Acao implements Comparable<Acao>{
         return Valor;
     }
 
+    public int getpontoGraf() {
+        return pontoGraf;
+    }
+
     @Override
     public int compareTo(Acao outraAcao) {
         if(this.Valor < outraAcao.getValor())
