@@ -12,12 +12,12 @@ public class Pessoa implements Comparable<Pessoa>{
         this.Acoes = Acoes;
     }
 
-    public int getMatricula() {
+    public int getMatricula() {//só utilizado na compare
         return matricula;
     }
 
     @Override
-    public int compareTo(Pessoa outraPessoa) {
+    public int compareTo(Pessoa outraPessoa) {//para fazer a ordenação por matricula.
         if(this.matricula < outraPessoa.getMatricula())
             return -1;
         else if(this.matricula > outraPessoa.getMatricula())

@@ -188,118 +188,180 @@ public class ControladorAcao {
         final Acao acaoMax = (Acao) Collections.max(AcoesHistoricoValorizacao);
         final Acao acaoMin = (Acao) Collections.min(AcoesHistoricoValorizacao);
 
-        final double AlturaMax = acaoMax.Valor * 1.10;
+        final double AlturaMax = acaoMax.Valor * 1.20;
         final double AlturaMin = acaoMin.Valor;
-        System.out.println(AlturaMin + " --------------");
         final int vetor[][] = new int[18][100];
         int pontoGraf = 0;
         double Multiplo = 0;
-        for (double i = 0; pontoGraf  <= 16; i = i + 0.10){
+        for (double i = 0; pontoGraf  <= 14; i = i + 0.10){
             pontoGraf = (int) ((acaoMax.Valor - AlturaMin) * ((AlturaMax * (((AlturaMax*i)-AlturaMin)/18)) / AlturaMin));
             Multiplo = i;
         }    
-
         for (final Acao p : AcoesHistoricoValorizacao) {
             if (p.Cod.trim().equals(codAcao)) {
                     pontoGraf = (int) ((p.Valor - AlturaMin) * ((AlturaMax * (((AlturaMax * Multiplo)-AlturaMin)/18)) / AlturaMin));
                     p.pontoGraf = pontoGraf;
                     //System.out.println("((" + p.Valor + " - " + AlturaMin + ") * ((" + AlturaMax + "*(((" + AlturaMax + "*" + Multiplo +")-" + AlturaMin + ")/17))/" + AlturaMin); 
-                    System.out.println(formato.format(p.Data) + "-" + pontoGraf);   
+                String Data = String.valueOf(formato.format(p.Data)); 
             }    
         }
-
-        for (int y = 0; y < 17 ; y++){ 
+        for (int y = 0; y <= 17 ; y++){ 
             for (int x = 0; x < 100 ; x++){ 
                 vetor[y][x] = 4;
             }    
-            System.out.print("\n");
         }
-        int coluna = 0, direcao = 0;
+        int coluna = 0, direcao1 = 0, direcao2, primeiro = 1;
         int conteudo[] = new int [6];
         for (int j = 0;j < AcoesHistoricoValorizacao.size() - 1; j++) {
-            if(AcoesHistoricoValorizacao.get(j).getpontoGraf() > AcoesHistoricoValorizacao.get(j + 1).getpontoGraf()){
-                direcao = 1;
-                conteudo[0] = 0;
-                conteudo[1] = 0;
-                conteudo[2] = 0;
-                conteudo[3] = 0;
-                conteudo[4] = 0;
-                conteudo[5] = 0;
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
-                    conteudo[1] = 1;
-                    conteudo[2] = 1;
+            if (primeiro != 1){
+                if(AcoesHistoricoValorizacao.get(j).getpontoGraf() > AcoesHistoricoValorizacao.get(j - 1).getpontoGraf()){
+                    direcao1 = 1;
+                    conteudo[0] = 0;
+                    conteudo[1] = 0;
+                    conteudo[2] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
+                        conteudo[1] = 1;
+                        conteudo[2] = 1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15)
+                        conteudo[2] = 2;  
+                } else if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < AcoesHistoricoValorizacao.get(j - 1).getpontoGraf()){
+                    direcao1 = -1;
+                    conteudo[0] = 0;
+                    conteudo[1] = 0;
+                    conteudo[2] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
+                        conteudo[1] = -1;
+                        conteudo[2] = -1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2)
+                        conteudo[2] = -2;
+                } else { 
+                    direcao1 = 0;
+                }
+                if(((AcoesHistoricoValorizacao.get(j).getpontoGraf()) > AcoesHistoricoValorizacao.get(j + 1).getpontoGraf())){
+                    direcao2 = +1;
+                    conteudo[5] = 0;
+                    conteudo[4] = 0;
+                    conteudo[3] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
+                        conteudo[5] = conteudo[2] + 1;
+                        conteudo[4] = conteudo[2] + 1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15)
+                        conteudo[5] = conteudo[2] + 2;  
+                } else if (((AcoesHistoricoValorizacao.get(j).getpontoGraf()) < AcoesHistoricoValorizacao.get(j + 1).getpontoGraf())){
+                    direcao2 = -1;
                     conteudo[3] = 1;
                     conteudo[4] = 1;
                     conteudo[5] = 1;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
+                        conteudo[4] = 0;
+                        conteudo[5] = 0;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2)
+                        conteudo[5] = 0;
+                } else { 
+                    direcao2 = 0;
+                    conteudo[3] = conteudo[2];
+                    conteudo[4] = conteudo[2];
+                    conteudo[5] = conteudo[2];
                 }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15){
-                    conteudo[2] = 2;
-                    conteudo[3] = 2;
-                    conteudo[4] = 2;
-                    conteudo[5] = 2;
+            } else {
+                primeiro = 0;   
+                if(((AcoesHistoricoValorizacao.get(j).getpontoGraf()) < AcoesHistoricoValorizacao.get(j + 1).getpontoGraf())){
+                    direcao1 = -1;
+                    direcao2 = -1;
+                    conteudo[5] = 0;
+                    conteudo[4] = 0;
+                    conteudo[3] = 0;
+                    conteudo[2] = 0;
+                    conteudo[1] = 0;
+                    conteudo[0] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
+                        conteudo[5] = conteudo[2] + 1;
+                        conteudo[4] = conteudo[2] + 1;
+                        conteudo[3] = conteudo[2] + 1;
+                        conteudo[2] = conteudo[2] + 1;
+                        conteudo[1] = conteudo[2] + 1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15){
+                        conteudo[5] = conteudo[2] + 2;
+                        conteudo[4] = conteudo[2] + 2;
+                        conteudo[3] = conteudo[2] + 2;
+                        conteudo[2] = conteudo[2] + 2;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 14){
+                        conteudo[5] = conteudo[2] + 3;
+                        conteudo[4] = conteudo[2] + 3;
+                        conteudo[3] = conteudo[2] + 3;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 13){
+                        conteudo[5] = conteudo[2] + 4;
+                        conteudo[4] = conteudo[2] + 4;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 13){
+                        conteudo[5] = conteudo[2] + 4;
+                    }
+
+
+
+
+                } else if (((AcoesHistoricoValorizacao.get(j).getpontoGraf()) > AcoesHistoricoValorizacao.get(j + 1).getpontoGraf())){
+                    direcao1 = -1;direcao2 = -1;
+                    conteudo[5] = 0;
+                    conteudo[4] = 0;
+                    conteudo[3] = 0;
+                    conteudo[2] = 0;
+                    conteudo[1] = 0;
+                    conteudo[0] = 0;
+
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
+                        conteudo[5] = -1;
+                        conteudo[4] = -1;
+                        conteudo[3] = -1;
+                        conteudo[2] = -1;
+                        conteudo[1] = -1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2){
+                        conteudo[5] = -2;
+                        conteudo[4] = -2;
+                        conteudo[3] = -2;
+                        conteudo[2] = -2;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 3){
+                        conteudo[5] = -3;
+                        conteudo[4] = -3;
+                        conteudo[3] = -3;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 4){
+                        conteudo[5] = -4;
+                        conteudo[4] = -4;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 5){
+                        conteudo[5] = -5;
+                    }
+                } else { 
+                    direcao2 = 0;
+                    conteudo[3] = conteudo[2];
+                    conteudo[4] = conteudo[2];
+                    conteudo[5] = conteudo[2];
                 }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 14){
-                    conteudo[3] = 3;
-                    conteudo[4] = 3;
-                    conteudo[5] = 3;
-                }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 13){
-                    conteudo[4] = 4;
-                    conteudo[5] = 4;          
-                }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 12)
-                    conteudo[5] = 5;
-                    
-            } else if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < AcoesHistoricoValorizacao.get(j + 1).getpontoGraf()){
-                direcao = -1;
-                direcao = 1;
-                conteudo[0] = 0;
-                conteudo[1] = 0;
-                conteudo[2] = 0;
-                conteudo[3] = 0;
-                conteudo[4] = 0;
-                conteudo[5] = 0;
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
-                    conteudo[1] = -1;
-                    conteudo[2] = -1;
-                    conteudo[3] = -1;
-                    conteudo[4] = -1;
-                    conteudo[5] = -1;
-                }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2){
-                    conteudo[2] = -2;
-                    conteudo[3] = -2;
-                    conteudo[4] = -2;
-                    conteudo[5] = -2;
-                }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 3){
-                    conteudo[3] = -3;
-                    conteudo[4] = -3;
-                    conteudo[5] = -3;
-                }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 4){
-                    conteudo[4] = -4;
-                    conteudo[5] = -4;          
-                }
-                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 5)
-                    conteudo[5] = -5;
-            } else { 
-                direcao = 0;
             }
-            System.out.println(coluna + " --- " + AcoesHistoricoValorizacao.get(j).getpontoGraf());
-            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[5]][coluna] = direcao;   
-            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[4]][coluna + 1] = direcao;
-            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[3]][coluna + 2] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[0]][coluna] = direcao1;   
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[1]][coluna + 1] = direcao1;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[2]][coluna + 2] = direcao1;
             
-            
-            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[2]][coluna + 3] = direcao;
-            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[1]][coluna + 4] = direcao;
-            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[0]][coluna + 5] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[3]][coluna + 3] = direcao2;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[4]][coluna + 4] = direcao2;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[5]][coluna + 5] = direcao2;
             coluna = coluna + 6;
             
         }
-        
-        for (int y = 0; y < 17 ; y++){ 
+        System.out.println("========================================================================================================");
+        System.out.println("========================================================================================================");
+        for (int y = 17; y >= 0 ; y--){ 
+            System.out.print("||");
             for (int x = 0; x < 100 ; x++){ 
                 if(vetor[y][x] == -1)
                     System.out.print("\\");
@@ -309,12 +371,17 @@ public class ControladorAcao {
                     System.out.print("-");
                 else
                     System.out.print(" ");
-                }    
-            System.out.print("\n");
+            }    
+            System.out.print("||\n");
         }
-
-        
-
+        System.out.print("========================================================================================================\n  ");
+        final SimpleDateFormat form = new SimpleDateFormat("  dd**");
+        for(int z = 0;z < 16; z++){
+            System.out.print(form.format(AcoesHistoricoValorizacao.get(z).getData()));
+        }
+        System.out.print("\n");
+        System.out.println("========================================================================================================");
+        System.out.println("========================================================================================================");
         return null;
     }
    
@@ -339,7 +406,6 @@ public class ControladorAcao {
         } catch (final IOException ioe) {
             System.out.println(ioe);
         }
-
         return false;
     }
 
@@ -402,3 +468,237 @@ public class ControladorAcao {
 
     }
 }
+/*
+
+
+for (int j = 0;j < AcoesHistoricoValorizacao.size() - 1; j++) {
+            if(AcoesHistoricoValorizacao.get(j).getpontoGraf() > AcoesHistoricoValorizacao.get(j + 1).getpontoGraf()){
+                direcao = 1;
+                conteudo[0] = 0;
+                conteudo[1] = 0;
+                conteudo[2] = 0;
+                conteudo[3] = 0;
+                conteudo[4] = 0;
+                conteudo[5] = 0;
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
+                    conteudo[1] = 1;
+                    conteudo[2] = 1;
+                    conteudo[3] = 1;
+                    conteudo[4] = 1;
+                    conteudo[5] = 1;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15){
+                    conteudo[2] = 2;
+                    conteudo[3] = 2;
+                    conteudo[4] = 2;
+                    conteudo[5] = 2;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 14){
+                    conteudo[3] = 3;
+                    conteudo[4] = 3;
+                    conteudo[5] = 3;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 13){
+                    conteudo[4] = 4;
+                    conteudo[5] = 4;          
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 12)
+                    conteudo[5] = 5;
+                    
+            } else if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < AcoesHistoricoValorizacao.get(j + 1).getpontoGraf()){
+                direcao = -1;
+                conteudo[0] = 0;
+                conteudo[1] = 0;
+                conteudo[2] = 0;
+                conteudo[3] = 0;
+                conteudo[4] = 0;
+                conteudo[5] = 0;
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
+                    conteudo[1] = -1;
+                    conteudo[2] = -1;
+                    conteudo[3] = -1;
+                    conteudo[4] = -1;
+                    conteudo[5] = -1;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2){
+                    conteudo[2] = -2;
+                    conteudo[3] = -2;
+                    conteudo[4] = -2;
+                    conteudo[5] = -2;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 3){
+                    conteudo[3] = -3;
+                    conteudo[4] = -3;
+                    conteudo[5] = -3;
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 4){
+                    conteudo[4] = -4;
+                    conteudo[5] = -4;          
+                }
+                if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 5)
+                    conteudo[5] = -5;
+            } else { 
+                direcao = 0;
+            }
+            System.out.println(coluna + " --- " + AcoesHistoricoValorizacao.get(j).getpontoGraf());
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[0]][coluna] = direcao;   
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[1]][coluna + 1] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[2]][coluna + 2] = direcao;
+            
+            
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[3]][coluna + 3] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[4]][coluna + 4] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[5]][coluna + 5] = direcao;
+            coluna = coluna + 6;
+            
+        }*/
+
+        /*     public static Acao mostrarValorizacao(final String codAcao) throws IOException, InterruptedException {
+        final SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        List <Acao> AcoesHistoricoValorizacao = new ArrayList<>();
+        FuncoesdeMenu.limparTela();
+        String Conteudo = "";
+        System.out.println("|| ============================================ ||");
+        System.out.println("|| Cód Ação  | Dia:          |  Preço Médio:    ||");
+        System.out.println("|| ============================================ ||");
+        for (final Acao p : AcoesHistorico) {
+            if (p.Cod.trim().equals(codAcao)) {
+                AcoesHistoricoValorizacao.add(p);
+                final int x = p.Cod.length();
+                String cod = p.Cod;
+                for (int i = 0; i < (7 - x); i++) {
+                    cod = cod + " ";
+                }
+
+                String Data = String.valueOf(formato.format(p.Data));
+                final int z = Data.length();
+                for (int i = 0; i < (9 - z); i++) {
+                    Data = Data + " ";
+                }
+
+                String Pm = String.valueOf(p.Valor);
+                final int y = Pm.length();
+                for (int i = 0; i < (10 - y); i++) {
+                    Pm = Pm + " ";
+                }
+
+                Conteudo = Conteudo + "|| " + cod + "  |  " + Data + "   |  R$ " + Pm + "   || \n";
+            }
+        }
+        System.out.print(Conteudo);
+        System.out.println("|| ============================================ ||\n");
+
+        final Acao acaoMax = (Acao) Collections.max(AcoesHistoricoValorizacao);
+        final Acao acaoMin = (Acao) Collections.min(AcoesHistoricoValorizacao);
+
+        final double AlturaMax = acaoMax.Valor * 1.10;
+        final double AlturaMin = acaoMin.Valor;
+        final int vetor[][] = new int[18][100];
+        int pontoGraf = 0;
+        double Multiplo = 0;
+        for (double i = 0; pontoGraf  <= 16; i = i + 0.10){
+            pontoGraf = (int) ((acaoMax.Valor - AlturaMin) * ((AlturaMax * (((AlturaMax*i)-AlturaMin)/18)) / AlturaMin));
+            Multiplo = i;
+        }    
+        for (final Acao p : AcoesHistoricoValorizacao) {
+            if (p.Cod.trim().equals(codAcao)) {
+                    pontoGraf = (int) ((p.Valor - AlturaMin) * ((AlturaMax * (((AlturaMax * Multiplo)-AlturaMin)/18)) / AlturaMin));
+                    p.pontoGraf = pontoGraf;
+                    //System.out.println("((" + p.Valor + " - " + AlturaMin + ") * ((" + AlturaMax + "*(((" + AlturaMax + "*" + Multiplo +")-" + AlturaMin + ")/17))/" + AlturaMin); 
+                String Data = String.valueOf(formato.format(p.Data)); 
+                System.out.println(p.pontoGraf + "--" + Data);
+            }    
+        }
+        for (int y = 0; y < 17 ; y++){ 
+            for (int x = 0; x < 100 ; x++){ 
+                vetor[y][x] = 4;
+            }    
+        }
+        int coluna = 0, direcao = 0, primeiro = 1;
+        int conteudo[] = new int [6];
+        for (int j = 0;j < AcoesHistoricoValorizacao.size() - 1; j++) {
+            if (primeiro != 1){
+                if(AcoesHistoricoValorizacao.get(j).getpontoGraf() > AcoesHistoricoValorizacao.get(j - 1).getpontoGraf()){
+                    direcao = 1;
+                    conteudo[0] = 0;
+                    conteudo[1] = 0;
+                    conteudo[2] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
+                        conteudo[1] = 1;
+                        conteudo[2] = 1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15)
+                        conteudo[2] = 2;  
+                } else if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < AcoesHistoricoValorizacao.get(j - 1).getpontoGraf()){
+                    direcao = -1;
+                    conteudo[0] = 0;
+                    conteudo[1] = 0;
+                    conteudo[2] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
+                        conteudo[1] = -1;
+                        conteudo[2] = -1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2)
+                        conteudo[2] = -2;
+                } else { 
+                    direcao = 0;
+                }
+                if(((AcoesHistoricoValorizacao.get(j).getpontoGraf()+conteudo[2]) > AcoesHistoricoValorizacao.get(j + 1).getpontoGraf())){
+                    direcao = 1;
+                    conteudo[5] = 0;
+                    conteudo[4] = 0;
+                    conteudo[3] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 16){
+                        conteudo[5] = conteudo[2] + 1;
+                        conteudo[4] = conteudo[2] + 1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() < 15)
+                        conteudo[5] = conteudo[2] + 2;  
+                } else if (((AcoesHistoricoValorizacao.get(j).getpontoGraf()+conteudo[2]) < AcoesHistoricoValorizacao.get(j + 1).getpontoGraf())){
+                    direcao = -1;
+                    conteudo[3] = 0;
+                    conteudo[4] = 0;
+                    conteudo[5] = 0;
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 1){
+                        conteudo[4] = -1;
+                        conteudo[5] = -1;
+                    }
+                    if (AcoesHistoricoValorizacao.get(j).getpontoGraf() > 2)
+                        conteudo[5] = -2;
+                } else { 
+                    direcao = 0;
+                    conteudo[3] = conteudo[2];
+                    conteudo[4] = conteudo[2];
+                    conteudo[5] = conteudo[2];
+                }
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[0]][coluna] = direcao;   
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[1]][coluna + 1] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[2]][coluna + 2] = direcao;
+            
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[5]][coluna + 3] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[4]][coluna + 4] = direcao;
+            vetor[AcoesHistoricoValorizacao.get(j).getpontoGraf() + conteudo[3]][coluna + 5] = direcao;
+            coluna = coluna + 6;
+            } else 
+                primeiro = 0;
+        }
+        
+        for (int y = 0; y < 17 ; y++){ 
+            for (int x = 0; x < 100 ; x++){ 
+                if(vetor[y][x] == -1)
+                    System.out.print("\\");
+                else if(vetor[y][x] == 1)
+                    System.out.print("/");
+                else if(vetor[y][x] == 0)
+                    System.out.print("-");
+                else
+                    System.out.print(" ");
+                }    
+            System.out.print("\n");
+        }
+        System.out.println("Dia 1-Dia 2-Dia 3-Dia 4-Dia 5-Dia 6-Dia 7-Dia 8-Dia 9-Dia10-Dia11-Dia12-Dia13-Dia14-Dia15-Dia16");
+        
+
+        return null;
+    }
+    */

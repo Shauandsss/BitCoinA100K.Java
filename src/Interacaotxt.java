@@ -30,23 +30,6 @@ public class Interacaotxt {
         return true;
     }
 
-    public static String buscaTxt(final String Diretorio, final String Conteudo) throws IOException {
-        String conteudo = "";
-        final File file = new File(Diretorio);
-        try {
-            final FileReader reader = new FileReader(file);
-            final BufferedReader input = new BufferedReader(reader);
-            String linha;
-            while ((linha = input.readLine()) != null) {
-                conteudo = conteudo + linha + "\n";
-            }
-            input.close();
-        } catch (final IOException ioe) {
-            System.out.println(ioe);
-        }
-        return conteudo;
-    }
-
     public static String alteraTxt(final String Diretorio, final String linhaAntiga, final String linhaNova)
             throws IOException {
         String conteudo = "";
@@ -126,6 +109,8 @@ public class Interacaotxt {
             while ((linha = input.readLine()) != null) {
                 if (!linha.equals("")) {
                     if (TipoObjeto == 1) { // Pessoa
+                            // Matricula;     Nome; CPF;
+
                         int x = linha.indexOf(";");
                         final String matricula = linha.substring(0, x);
                         linha = linha.substring(x + 1, linha.length());
@@ -172,7 +157,7 @@ public class Interacaotxt {
                         linha = linha.substring(x + 1, linha.length());
 
                         final Pessoa X = ControladorPessoa.pegarPessoa(iMatricula);
-                        ControladorPessoa.alterarPessoasComAcao(iMatricula,X.nome,X.cpf, ControladorAcao.adicionarAcoesAPessoa(iMatricula, codAcao, dPm, sQuantidade));
+                        ControladorPessoa.alterarPessoas(iMatricula,X.nome,X.cpf, ControladorAcao.adicionarAcoesAPessoa(iMatricula, codAcao, dPm, sQuantidade));
                         
                     }
                 } 

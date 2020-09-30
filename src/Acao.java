@@ -28,6 +28,9 @@ public class Acao implements Comparable<Acao>{
     public int getpontoGraf() {
         return pontoGraf;
     }
+    public Date getData() {
+        return Data;
+    }
 
     @Override
     public int compareTo(Acao outraAcao) {

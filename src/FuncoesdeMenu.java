@@ -55,7 +55,7 @@ public class FuncoesdeMenu {
         String digitado = "";
       //  digitado = Scan.nextLine();
         digitado = Scan.nextLine();
-        if((digitado == null) || (digitado.equals(""))){
+        if((digitado == null) || ((digitado.equals("")))){
             return 0;
         }
         return Integer.parseInt(digitado); 
@@ -111,7 +111,7 @@ public class FuncoesdeMenu {
                         int Qtnd = pegarInt();
                         Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
                         
-                        ControladorPessoa.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,
+                        ControladorPessoa.alterarPessoas(X.matricula, X.nome, X.cpf,
                                 ControladorAcao.adicionarAcoesAPessoa(MatriculaLogada, CodAcao, Pm, Qtnd, X.Acoes));
                         ControladorAcao.somarPm(X.matricula, CodAcao, X.Acoes);
                         System.out.println(" " + X.nome + ", " + Qtnd + " cotas de " + CodAcao + " foram adicionadas a sua carteira com preço médio de: " + Pm + "\n "
@@ -130,7 +130,7 @@ public class FuncoesdeMenu {
                         return;
  
                 }
-                    System.out.println("Ação não registrada na BM&F BOVESPA"); 
+                    System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
                     acoes(1);
                 }
         } 
@@ -157,7 +157,7 @@ public class FuncoesdeMenu {
                 boolean iscpf = ControladorPessoa.isCPF(scpf);
                 if(iscpf){
                     long cpf = Long.parseLong(scpf);    
-                    ControladorPessoa.pegarPessoa(ControladorPessoa.alterarPessoas(matricula, nome, cpf));
+                    ControladorPessoa.pegarPessoa(ControladorPessoa.alterarPessoas(matricula, nome, cpf, p.Acoes));
                     questaoRetorno(1, 2);
                 } else {
                     gerarMensagem(3);
@@ -178,7 +178,7 @@ public class FuncoesdeMenu {
                     int Qntd = pegarInt();
                     Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
                     AcaoTemp = AcoesP.alterarAcoes(X.matricula, CodAcao, Pm, Qntd, X.Acoes);
-                    ControladorPessoa.alterarPessoasComAcao(X.matricula,X.nome,X.cpf, AcaoTemp);
+                    ControladorPessoa.alterarPessoas(X.matricula,X.nome,X.cpf, AcaoTemp);
                     System.out.println(" " + X.nome + ", " + Qntd + " cotas de " + CodAcao + " foram alteradas na sua carteira \n " +
                     " com preço médio de: " + Pm + "\n"
                     + " Deseja alterar mais ações a sua carteira ? 1 - Sim | 2 - Não ");
@@ -194,7 +194,7 @@ public class FuncoesdeMenu {
 
                 } else {
                     System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
-                    acoes(1);
+                    acoes(2);
                 }
             }   
         } 
@@ -239,7 +239,7 @@ public class FuncoesdeMenu {
                 if(ControladorAcao.isAcao(CodAcao)){
                     Pessoa X = ControladorPessoa.pegarPessoa(MatriculaLogada);
                     Acao Z = AcoesP.pegarAcao(CodAcao, X.Acoes);
-                    ControladorPessoa.alterarPessoasComAcao(X.matricula, X.nome, X.cpf,
+                    ControladorPessoa.alterarPessoas(X.matricula, X.nome, X.cpf,
                             ControladorAcao.removerAcoes(X.matricula, CodAcao, X.Acoes));
                     System.out.println(" " + X.nome + ", " + Z.Quantidade + " cotas de " + Z.Cod + " foram excluídas na sua carteira com preço médio de: " + Z.Pm + "\n "
                     + " Deseja excluir mais ações da sua carteira ? 1 - Sim | 2 - Não ");
@@ -255,7 +255,7 @@ public class FuncoesdeMenu {
                  
                 } else {
                     System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
-                    acoes(1);
+                    acoes(3);
                 }
             } 
         }
@@ -325,7 +325,7 @@ public class FuncoesdeMenu {
                             return;
                     } else {
                         System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
-                            acoes(1);
+                            acoes(4);
                     }
 
                 } if (teropc == 2) {
@@ -337,6 +337,8 @@ public class FuncoesdeMenu {
                     String CodAcao = Scan.nextLine();
                     if(ControladorAcao.isAcao(CodAcao)){
                         ControladorAcao.mostrarValorizacao(CodAcao);
+                    } else {
+                        System.out.println("Ação não registrada na Bolsa de Valores Brasileira"); 
                     }
                 } 
             }
